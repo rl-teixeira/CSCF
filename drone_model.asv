@@ -86,7 +86,7 @@ ylabel('$V_1$')
 theta_e_2D= atan((K/(m*g))*v0e);
 phi_e_2D= atan((K*cos(theta_e_2D)*v0e)/(m*g));
 
-A_2D= [0 0 0 0; 0 0 0 0; -1 0 -2*K*v0e 0; 0 -1 0 -2*K*v0e];
+A_2D= [0 0 0 0; 0 0 0 0; -1 0 -2*K*v0e 0; 0 -1 0 -2*K*v0e]';
 B_2D= [0 0; 0 0; 0 m*g*sec(theta_e_2D)^2; (m*g*tan(theta_e_2D)*tan(phi_e_2D))/(cos(phi_e_2D)) m*g*sec(theta_e_2D)^2/cos(phi_e_2D)];
 C_2D= [1 0 0 0; 0 1 0 0];
 D_2D=[0];
@@ -101,9 +101,6 @@ out_2D= lsim(drone_ss_d_2D,in_step_2D,t,[0 0 0 0]');
 lsim(drone_ss_d_2D,in_step_2D,t,[0 0 0 0]')
 figure(103)
 plot(out_2D(:,1),out_2D(:,2))
-hold on
-plot(out_2D(:,2),'r')
-hold off
 xlabel('$P_{10_x}$'), ylabel('$P_{10_y}$')
 title('\textbf{$P_{10}$} - Position')
 

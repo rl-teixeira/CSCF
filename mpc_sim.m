@@ -11,10 +11,11 @@ B= drone_ss_d.B;
 C= drone_ss_d.C;
 D= drone_ss_d.D;
 
+%
 P= 1;
 Q= 1;
 R= 1;
-N= 3;
+N= 10;
 
 %LQT matrices
 [Fb, Gb, Qb, Rb, F, G, H]= GetBatchYMatrices(A, B, C, P, Q, R);
