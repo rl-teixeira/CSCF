@@ -30,7 +30,7 @@ A= [0 -1; 0 -2*K*v0e];
 B= [0 g/cos(theta_e)^2]';
 C= eye(2);
 D= [0];
-drone_ss= ss(A,B,C,D)
+drone_ss= ss(A,B,C,D);
 
 %% 1.1.4
 
