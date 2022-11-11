@@ -23,11 +23,12 @@ ny= size(C,1);
 P= 1%*eye(2);
 Q= 1%*eye(2);
 R= 1%*eye(2);
-N= 10;
+N= 5;
 
 %LQT matrices
-[Fb, Gb, Qb, Rb, F, G, H]= GetBatchYMatrices(A, B, C, P, Q, R);
-
+[F, G, Qb, Rb, H]= GetBatchXMatrices(A, B, C, N, P, Q, R);
+Fb= F*H;
+Gb= F*H;
 %final cost matrices and MPC gains
 Rt= Gb'*Qb*Gb + Rb;
 St= Gb'*Qb;
