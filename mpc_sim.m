@@ -31,13 +31,13 @@ ny= size(C,1);
 
 %% Unconstrained MPC
 
-%LQT matrices
+%batch matrices
 [F, G, Qb, Rb, H]= GetBatchXMatrices(A, B, C, N, P, Q, R);
 Fb= H*F;
 Gb= H*G;
-%final cost matrices and MPC gains
 Rt= Gb'*Qb*Gb + Rb;
 St= Gb'*Qb;
+%MPC gains
 Ky= Rt^-1*St;
 K= Ky*Fb;
 
@@ -76,7 +76,30 @@ legend('Ref','X1 - $P_{10}$','X2 - $V_1$','FontSize',10)
 
 %% Constrained MPC
 
+clear U Uopt X x0 Y
 
+x0= [0 0]';
+
+%batch matrices
+[F, G, Qb, Rb, H]= GetBatchXMatrices(A, B, C, N, P, Q, R);
+Fb= H*F;
+Gb= H*G;
+Rt= Gb'*Qb*Gb + Rb;
+St= Gb'*Qb;
+
+%constrain matrices
+u_max= 30*(pi/180);
+u_min= -u_max;
+y_min= 0.2;
+y_max= 5;
+Mu= [-1;1];
+My= [-Gb; Gb];
+M= [Mu; My];
+wu= [-u_min; u_max];
+wy= [-y_min + Fb*x0; y_max - Fb*x0];
+w= [wu; wy];
+
+%simulation
 
 
 
