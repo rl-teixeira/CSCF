@@ -107,5 +107,5 @@ title('\textbf{$P_{10}$} - Position')
 
 %% saves
 
-save drone_model.mat drone_ss_d drone_ss_d_2D A_2D B_2D C_2D D_2D
+save drone_model.mat drone_ss_d drone_ss_d_2D Ts
 
