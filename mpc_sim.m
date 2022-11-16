@@ -8,10 +8,11 @@ load drone_model.mat
 
 A= drone_ss_d.A;
 B= drone_ss_d.B;
-C= drone_ss_d.C;
+%C= drone_ss_d.C;
+C= [1 0];
 D= drone_ss_d.D;
 
-Ref= [-1*ones(200,1) 1*ones(200,1) -1*ones(200,1) 1*ones(200,1)];
+Ref= [-1*ones(200,1); 1*ones(200,1); -1*ones(200,1); 1*ones(200,1)]';
 nk= length(Ref);
 TRef= 1:nk;
 nu= size(B,2);
@@ -23,12 +24,12 @@ ny= size(C,1);
 P= 1%*eye(2);
 Q= 1%*eye(2);
 R= 1%*eye(2);
-N= 5;
+N= 10;
 
 %LQT matrices
 [F, G, Qb, Rb, H]= GetBatchXMatrices(A, B, C, N, P, Q, R);
-Fb= F*H;
-Gb= F*H;
+Fb= H*F;
+Gb= H*G;
 %final cost matrices and MPC gains
 Rt= Gb'*Qb*Gb + Rb;
 St= Gb'*Qb;
