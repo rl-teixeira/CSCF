@@ -6,15 +6,13 @@ set(0,'defaultLegendInterpreter','latex');
 
 %% loads
 load drone_model.mat
-
-%% setup
-
 A= drone_ss_d.A;
 B= drone_ss_d.B;
 %C= drone_ss_d.C;
 C= [1 0];
 D= drone_ss_d.D;
 
+%% Unconstrained MPC
 
 % Cost functional matrices
 P= 1;
@@ -28,8 +26,6 @@ TRef= 1:nk;
 nu= size(B,2);
 nx= size(B,1);
 ny= size(C,1);
-
-%% Unconstrained MPC
 
 %batch matrices
 [F, G, Qb, Rb, H]= GetBatchXMatrices(A, B, C, N, P, Q, R);
