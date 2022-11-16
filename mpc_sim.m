@@ -17,9 +17,9 @@ D= drone_ss_d.D;
 
 
 % Cost functional matrices
-P= 1%*eye(2);
-Q= 1%*eye(2);
-R= 1%*eye(2);
+P= 1;
+Q= 1;
+R= 1;
 N= 10;
 
 Ref= [-1*ones(200,1); 1*ones(200,1); -1*ones(200,1); 1*ones(200,1); ones(N,1)]';
@@ -28,6 +28,8 @@ TRef= 1:nk;
 nu= size(B,2);
 nx= size(B,1);
 ny= size(C,1);
+
+%% Unconstrained MPC
 
 %LQT matrices
 [F, G, Qb, Rb, H]= GetBatchXMatrices(A, B, C, N, P, Q, R);
@@ -39,8 +41,7 @@ St= Gb'*Qb;
 Ky= Rt^-1*St;
 K= Ky*Fb;
 
-%% simulation
-
+%simulation
 x0= [0 0]';
 X(:,1)=x0;
 
@@ -55,8 +56,7 @@ for k= 1:nk-N-1
 end
 
 
-%% plots
-
+% plots
 figure(101)
 plot(X(1,:),X(2,:))
 xlabel('X1 - $P_{10}$')
@@ -73,6 +73,8 @@ xlabel('Time ($s$)')
 title('State evolution')
 legend('Ref','X1 - $P_{10}$','X2 - $V_1$','FontSize',10)
 
+
+%% Constrained MPC
 
 
 
