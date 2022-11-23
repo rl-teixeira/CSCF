@@ -69,6 +69,15 @@ xlabel('Time ($s$)')
 title('State evolution')
 legend('Ref','X1 - $P_{10}$','X2 - $V_1$','FontSize',10)
 
+figure(103)
+plot(TRef*Ts, Ref, 'r')
+hold on
+plot(TRef(1:nk-N-1)*Ts, U(1,:),'b')
+hold off
+xlabel('Time ($s$)')
+title('Input evolution')
+legend('Ref','U - $\Theta_{10}$', 'FontSize',10)
+
 
 %% Constrained MPC
 
@@ -88,11 +97,14 @@ u_max= 30*(pi/180);
 u_min= -u_max;
 y_min= 0.2;
 y_max= 5;
+y_e= 0.5;
+dy_min= y_min - y_e;
+dy_max= y_min - y_e;
 Mu= [-1;1];
 My= [-Gb; Gb];
 M= [Mu; My];
 wu= [-u_min; u_max];
-wy= [-y_min + Fb*x0; y_max - Fb*x0];
+wy= [-dy_min + Fb*x0; dy_max - Fb*x0];
 w= [wu; wy];
 
 %simulation
