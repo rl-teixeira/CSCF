@@ -99,18 +99,62 @@ y_min= 0.2;
 y_max= 5;
 y_e= 0.5;
 dy_min= y_min - y_e;
-dy_max= y_min - y_e;
-Mu= [-1;1];
+dy_max= y_max - y_e;
+U_max = kron(u_max,ones(N,1));
+U_min = kron(u_min,ones(N,1));
+dY_max = kron(dy_max,ones(N+1,1));
+dY_min = kron(dy_min,ones(N+1,1));
+Mu= [-eye(N*nu);eye(N*nu)];
 My= [-Gb; Gb];
 M= [Mu; My];
-wu= [-u_min; u_max];
-wy= [-dy_min + Fb*x0; dy_max - Fb*x0];
+wu= [-U_min; U_max];
+wy= [-dY_min + Fb*x0; dY_max - Fb*x0];
 w= [wu; wy];
 
 %simulation
 
+X(:,1)=x0;
 
+for k= 1:nk-N-1
+    
+    xk = X(:,k);
+    wy = [-dY_min + Fb*xk; dY_max - Fb*xk];
+    w = [wu;wy];
+    ref= Ref(:,k:k+N)';
+    
+    [Uo,Jo,exitflag,output,lambda] = quadprog(2*Rt,2*St*(Fb*xk-ref),M,w);
+    if exitflag~=1
+        error('Problems in the Optimization problem.');
+    end    
+    Uopt(:,:,k) = reshape( Uo ,nu,N);    
+    U(:,k) = Uopt(:,1,k);
+    
+    X(:,k+1) = A*X(:,k) + B*U(:,k);
+    
+end
 
+%plots
+figure(201)
+plot(X(1,:),X(2,:))
+xlabel('X1 - $P_{10}$')
+ylabel('X2 - $V_1$')
+title('Phase Plot')
 
+figure(202)
+plot(TRef*Ts, Ref, 'r')
+hold on
+plot(TRef(1:nk-N)*Ts, X(1,:),'b')
+plot(TRef(1:nk-N)*Ts, X(2,:),'g')
+hold off
+xlabel('Time ($s$)')
+title('State evolution')
+legend('Ref','X1 - $P_{10}$','X2 - $V_1$','FontSize',10)
 
-
+figure(203)
+plot(TRef*Ts, Ref, 'r')
+hold on
+plot(TRef(1:nk-N-1)*Ts, U(1,:),'b')
+hold off
+xlabel('Time ($s$)')
+title('Input evolution')
+legend('Ref','U - $\Theta_{10}$', 'FontSize',10)
